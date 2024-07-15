@@ -1,0 +1,12 @@
+{% extends "./base-logueado.html" %}
+{% load static %}
+{% block content %}
+
+    {% if user.is_authenticated %}
+        <p>Bienvenido, {{ user.first_name }} {{ user.last_name }}</p>
+        <!-- Otros campos que necesites -->
+    {% else %}
+        <p>No has iniciado sesión.</p>
+    {% endif %}
+
+{% endblock %}

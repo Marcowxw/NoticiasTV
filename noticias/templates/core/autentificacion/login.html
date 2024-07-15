@@ -1,0 +1,15 @@
+{% extends "../base-index.html" %}
+{% load static %}
+{% block content %}
+    <a href="{% url 'index' %}" class="btn btn-primary">volver</a>
+    <h2>Iniciar Sesión</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    <div class="text-center mt-3">
+        <a href="{% url 'registro' %}" class="btn btn-link">¿No tienes cuenta? Regístrate aquí</a>
+    </div>
+    
+{% endblock %}

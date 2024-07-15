@@ -1,0 +1,24 @@
+{% extends "./base-index.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <h1>Lista de Noticias</h1>
+    <div class="row">
+        {% for noticia in noticias %}
+            <div class="col-md-4">
+                    <img src="{{ noticia.imagen_noticia.url }}" alt="{{ noticia.titulo_noticia }}">
+                    <div>
+                        <h5>{{ noticia.titulo_noticia }}</h5>
+                        <p>{{ noticia.decripcion_noticia }}</p>
+                        <p>{{ noticia.fecha_noticia }}</p>
+                    </div>
+            </div>
+        {% empty %}
+            <p>No hay noticias disponibles.</p>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

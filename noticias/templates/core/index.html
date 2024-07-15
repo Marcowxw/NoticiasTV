@@ -1,0 +1,27 @@
+{% extends "./base-index.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <h1>Lista de Noticias</h1>
+    <div class="row">
+        {% for noticia in noticias %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <img src="{{ noticia.imagen_noticia.url }}" class="card-img-top" alt="{{ noticia.titulo_noticia }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ noticia.titulo_noticia }}</h5>
+                        <p class="card-text">{{ noticia.decripcion_noticia }}</p>
+                        <p class="text-muted">{{ noticia.fecha_noticia }}</p>
+                        <a href="{% url 'detalles_noticia' noticia.id_noticia %}" class="btn btn-primary">Ver más</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No hay noticias disponibles.</p>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

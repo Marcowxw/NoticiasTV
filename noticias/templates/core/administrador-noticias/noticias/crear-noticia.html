@@ -1,0 +1,14 @@
+{% extends "../base-inicio-logueado.html" %}
+{% load static %}
+{% block content %}
+
+<div class="crear-usuario-conteiner">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Crear Noticia</button>
+    </form>
+</div>
+
+
+{% endblock %}

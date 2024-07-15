@@ -1,0 +1,112 @@
+{% extends "../base-inicio-logueado.html" %}
+{% load static %}
+{% block content %}
+    <script>
+        let dataTable;
+        let dataTableIsInitialized = false;
+      
+        const initDataTable = async () => {
+          if (dataTableIsInitialized) {
+            dataTable.destroy();
+            dataTableIsInitialized = false;
+          }
+      
+          await listaPerfiles();
+      
+          dataTable = $("#tabla_noticias").DataTable({
+            language: {
+          "emptyTable": "No hay valores disponibles en la tabla",
+          "lengthMenu": "Mostrar _MENU_ entradas",
+          "info": "Mostrando _START_ de _END_ de _TOTAL_ entradas",
+          "infoEmpty": "Mostrando 0 de 0 de 0 entradas",
+          "search": "Buscar:",
+          "paginate": {
+            "first": "<<",
+            "last": ">>",
+            "next": ">",
+            "previous": "<"
+          },
+        }
+          });
+
+
+
+          dataTableIsInitialized = true;
+        };
+      
+        const listaPerfiles = async () => {
+          try {
+            const response = await fetch("{% url 'lista-noticias' %}");
+            const data = await response.json();
+            let content = "";
+            const baseModificarUrl = "{% url 'modificar-noticia' 0 %}".slice(0, -2); // Remove the '0/' part
+            const baseEliminarUrl = "{% url 'eliminar-noticia' 0 %}".slice(0, -2); // Remove the '0/' part
+      
+            data.noticias.forEach((noticia, index) => {
+              if (noticia.id_noticia) {
+                const modificarUrl = baseModificarUrl + noticia.id_noticia + '/';
+                const eliminarUrl = baseEliminarUrl + noticia.id_noticia + '/';
+      
+                content += `
+                  <tr>
+                    <td>${index + 1}</td>
+                    <td>${noticia.titulo_noticia}</td>
+                    <td>${noticia.decripcion_noticia}</td>
+                    <td>${noticia.fecha_noticia}</td>
+                    <td>${noticia.imagen_noticia}</td>
+                    <td>${noticia.id_tipo_noticia__descripcion_tipo_noticia}</td>
+                    <td>${noticia.id_Nacion_Noticias__descripcion_Nacion_Noticias}</td>
+                    <td>
+                      <a href="${modificarUrl}" class="editar">
+                        <i class="bi bi-pencil-square"></i>
+                      </a>
+                    </td>
+                    <td>
+                      <a href="${eliminarUrl}" class="eliminar">
+                        <i class="bi bi-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                `;
+              }
+            });
+            document.getElementById("tabla_body_noticias").innerHTML = content;
+          } catch (error) {
+            console.error("Error fetching profiles:", error);
+          }
+        };
+      
+        document.addEventListener("DOMContentLoaded", async () => {
+          await initDataTable();
+        });
+    </script>
+      
+    <div class="container-man-usuarios">
+        <div class="superior">
+          <!-- titulo y filtro -->
+          <div><h3>Publicar Noticias</h3></div>
+          <div>
+            <a type="button" class="btn btn-primary" href="{% url 'crear-noticia' %}">Nuevo</a>
+          </div>
+        </div>
+        <div class="inferior">
+          <table class="table table-responsive-xxl table-hover" id="tabla_noticias">
+            <thead class="cabecera-tabla">
+              <tr>
+                <th scope="col col-2">#</th>
+                <th scope="col col-3">Nombre Noticia</th>
+                <th scope="col col-3">Texto Noticia</th>
+                <th scope="col col-3">Fecha</th>
+                <th scope="col col-3">imagen</th>
+                <th scope="col col-3">Tipo Noticia</th>
+                <th scope="col col-3">Nacion Noticia</th>
+                <th scope="col col-1">Edit.</th>
+                <th scope="col col-1">Elim.</th>
+              </tr>
+            </thead>
+            <tbody id="tabla_body_noticias">
+            </tbody>
+          </table>
+        </div>
+      </div>
+{% endblock %}
